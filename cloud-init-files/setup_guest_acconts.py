@@ -14,15 +14,6 @@ def replaceStrInFile(strMatch,strReplace,fileName):
   file=open(fileName,mode='w')
   file.write(fileText)
   file.close()
-def createUserWebDirectory(username):
-
-  webDirectory="/var/www/html/"+username
-  subprocess.run(["mkdir",webDirectory])
-  subprocess.run(["chown",username+":"+username,webDirectory])
-def deleteUserWebDirectory(username):
-
-  webDirectory="/var/www/html/"+username
-  subprocess.run(["rm","-rf",webDirectory])
 def createGuestAccounts(numAccounts):
 
   print("creating guest accounts")
@@ -55,19 +46,15 @@ def enablePasswordSSHAuthentication():
   replaceStrInFile("PasswordAuthentication no","PasswordAuthentication yes",
     "/etc/ssh/sshd_config")
   subprocess.run(["service","ssh","restart"])
-def installJekyll():
-
-  subprocess.run(["gem","install","jekyll","bundler"])
 def main():
 
-  parser = argparse.ArgumentParser(description='Setup Jekyll and create guest accounts')
+  parser = argparse.ArgumentParser(description='Create guest accounts')
   parser.add_argument('numGuestAccounts', metavar='N', type=int,
                       help='Number of guest accounts to create')
   #parser.add_argument('--delete', action=argparse.BooleanOptionalAction,help="Delete accounts rather than create them")
   parser.add_argument('--delete', action='store_true',default=False,help="Delete accounts rather than create them [account creation is default action]")
   args = parser.parse_args()
 
-  installJekyll()
   enablePasswordSSHAuthentication()
   if args.delete:
     deletGuestAccounts(args.numGuestAccounts)

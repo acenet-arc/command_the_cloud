@@ -1,0 +1,10 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - fail2ban
+runcmd:
+  - ["wget","https://raw.githubusercontent.com/acenet-arc/command_the_cloud/master/cloud-init-files/passphrase_generator.py"]
+  - ["wget","https://raw.githubusercontent.com/acenet-arc/command_the_cloud/master/cloud-init-files/setup_guest_accounts.py"]
+#add number of accounts to create after name of script
+  - ["python3","./setup_guest_accounts.py","1"]

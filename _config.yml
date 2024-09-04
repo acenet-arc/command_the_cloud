@@ -67,11 +67,6 @@ exclude:
 
 episode_order: 
   - introduction
-  - the-internet
-  - the-cloud
-  - creating-a-keypair
-  - create-a-persistent-virtual-machine
-  - security-updates
   
 # Turn off built-in syntax highlighting.
 highlighter: false
