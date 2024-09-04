@@ -15,7 +15,6 @@ def replaceStrInFile(strMatch,strReplace,fileName):
   file.write(fileText)
   file.close()
 def createGuestAccounts(numAccounts):
-
   print("creating guest accounts")
   guest_account_passphrase=passphrase_generator.getRandom3WordPhrase()
   guest_account_passphrase_enc=crypt.crypt(guest_account_passphrase)
@@ -27,9 +26,7 @@ def createGuestAccounts(numAccounts):
     subprocess.run(["useradd","-s","/bin/bash","-m","-p",
       guest_account_passphrase_enc,username])
 
-    createUserWebDirectory(username)
 def deletGuestAccounts(numAccounts):
-
   print("deleting guest accounts")
   for i in range(numAccounts):
 
@@ -43,8 +40,12 @@ def enablePasswordSSHAuthentication():
 
   print("***WARNING: SHOULD HAVE FAIL2BAN RUNNING NOW***")
   print("enabling ssh password authentication")
+  replaceStrInFile("#PasswordAuthentication yes","PasswordAuthentication yes",
+    "/etc/ssh/sshd_config")
   replaceStrInFile("PasswordAuthentication no","PasswordAuthentication yes",
     "/etc/ssh/sshd_config")
+  replaceStrInFile("PasswordAuthentication no","PasswordAuthentication yes",
+    "/etc/ssh/sshd_config.d/60-cloudimg-settings.conf")
   subprocess.run(["service","ssh","restart"])
 def main():
 
