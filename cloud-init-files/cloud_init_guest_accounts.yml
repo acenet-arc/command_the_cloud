@@ -1,10 +1,19 @@
 #cloud-config
+#NOTE: before use edit the following:
+# 1. replace <num-users> with the number of guest accounts you want
+# 2. replace <admin-user> with instructors username
+# 3. replace <admin-public-ssh-key> with instructures public ssh key
 package_update: true
 package_upgrade: true
 packages:
   - fail2ban
+users:
+  - name: <admin-user>
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - <admin-user-ssh-public-key>
 runcmd:
   - ["wget","https://raw.githubusercontent.com/acenet-arc/command_the_cloud/master/cloud-init-files/passphrase_generator.py"]
   - ["wget","https://raw.githubusercontent.com/acenet-arc/command_the_cloud/master/cloud-init-files/setup_guest_accounts.py"]
-#add number of accounts to create after name of script
-  - ["python3","./setup_guest_accounts.py","1"]
+  - ["python3","./setup_guest_accounts.py","<num-users>"]
