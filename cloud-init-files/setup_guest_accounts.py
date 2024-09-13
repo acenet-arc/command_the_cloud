@@ -20,7 +20,6 @@ def createGuestAccounts(numAccounts):
   guest_account_passphrase_enc=crypt.crypt(guest_account_passphrase)
   print("  Guest accounts passphrase: \""+guest_account_passphrase+"\"")
   for i in range(numAccounts):
-
     username="{}{:02d}".format("user",i+1)
     print("  "+username)
     subprocess.run(["useradd","-s","/bin/bash","-m","-p",
@@ -33,7 +32,6 @@ def deletGuestAccounts(numAccounts):
     username="{}{:02d}".format("user",i+1)
     print("  "+username)
     subprocess.run(["deluser","--remove-home",username])
-    deleteUserWebDirectory(username)
 def enablePasswordSSHAuthentication():
   '''NOTE: really should have fail2ban running before this function is called.
   '''

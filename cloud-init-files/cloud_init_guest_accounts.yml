@@ -7,6 +7,8 @@ package_update: true
 package_upgrade: true
 packages:
   - fail2ban
+  - python3-pip
+  - python3-virtualenv
 users:
   - name: <admin-user>
     shell: /bin/bash

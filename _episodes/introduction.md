@@ -1,48 +1,66 @@
 ---
 layout: episode
 title: "Introduction"
-teaching: 20
+teaching: 15
 exercises: 0
 questions:
-- "Who are we?"
-- "Who are you?"
-- "What will we do in this course?"
+- "What is the OpenStack CLI?"
+- "Why use the OpenStack CLI?"
+- "Are their things the OpenStack CLI can do that the Web Dashboard can't?"
 objectives:
-- "Introduce the instructors."
-- "Get to know the students and how they want to use the cloud."
-- "Provide an overview of the course."
-- "Ensure everyone has their environments setup."
+- ""
 keypoints:
 - "[**Cloud computing**](../reference#cloud-computing) is very flexible and has many diverse uses."
-- "Setup of Alliance cloud environments is left to its users, enabling great flexibility but requiring more knowledge."
-- "In this course we will setup a cloud environment to run a Jekyll site."
+- "Using the OpenStack dashboard is an easy way to perform many common cloud related tasks, however it doesn't provide access to all the functionality of the cloud."
+- "The OpenStack CLI can be used to run commands to obtain information and perform tasks similar to the OpenStack dashboard."
+- "The OpenStack CLI can also provide information and perform tasks not available through the OpenStack dashboard."
 start: true
 start_time: 780
 ---
 
-## Office hours
+> ## Office hours
+> 
+> | Day of the week | Date | Time (ADT) |
+> | :-- | :-- | :-- |
+> | Friday    | TBD | 1:00 - 3:00pm |
+> | Friday    | TBD | 1:00 - 3:00pm |
+{: .callout}
 
-| Day of the week | Date | Time (ADT) |
-| :-- | :-- | :-- |
-| Friday    | October 20<sup>st</sup> | 1:00 - 3:00pm |
-| Friday    | October 27<sup>th</sup> | 1:00 - 3:00pm |
+Cloud computing offers a wide range of usage possibilities. From running basic HTML sites for publishing works, to collaborative wikis, to running persistent web scrapers, automating data collection and processing, to providing platforms to help support whole research communities. Possible use cases are varied and wide ranging. One particular example using the Alliance cloud is [Voyant Tools](https://voyant-tools.org/), a web-based text reading and analysis environment. It is a scholarly project that is designed to facilitate reading and interpretive practises for digital humanities students and scholars as well as for the general public. In order to make good use of the cloud you need to know how to interact with it to do the things you need to do. In this workshop we are going to introduce a new way of interacting with OpenStack clouds, the OpenStack Command Line Interface (CLI).
+
+## What is the OpenStack CLI?
+
+If you have been using the OpenStack dashboard either in our [Introduction to Cloud](https://acenet-arc.github.io/introduction_to_cloud/) course or from your own experience working with the Alliance or similar OpenStack based clouds you should have some idea of the sorts of things you can do on the OpenStack Horizon (web) dashboard, such as:
+
+* creating virtual machines booting from a volume,
+* editing security groups, and
+* checking project quotas.
+
+The dashboard is an easy way to do many common tasks you need to perform when working with the cloud. However, it is not the only way to interact with your cloud project. Another very common way to interact with your cloud project is using the OpenStack CLI. This is a command line tool that allows you to run commands in a local (or remote) terminal and interact with your remote cloud projects on different OpenStack based clouds. To do this you will need to install the tools and setup the necessary credentials to authenticate with the particular remote cloud project you want to work with. We will get to that in the next episode.
+
+## Why use the OpenStack CLI?
+
+While the OpenStack dashboard is easy to perform many common OpenStack cloud tasks, there are some limitations. Not all possible cloud functionality is exposed to the dashboard. Instead some tasks and information can only be performed or obtained using the OpenStack CLI. For example, with the `openstack quota show --usage` command used for a project on Arbutus cloud, you can see what your storage quota for 'OS or Database' volumes is and how much you have used. On the web dashboard you only see the total volume storage limits and usage, which is not the important limit when creating specialized types of volumes. Then when you go to create an "OS or Database" volume you will know what the maximum size of that volume type you can create is. Otherwise in the dashboard it might look like you are able to create a 200GB 'OS and Database' volume for example, but when you click "create volume" you get the message "Error: Unable to create volume." and you have no idea why.
+
+Here is some example output of the `openstack quota show --usage` command.
+~~~
+$ openstack quota show --usage
+~~~
+{: .bash}
+~~~
++-----------------------------------+---------------------------------------------+--------+----------+
+| Resource                          |                                       Limit | In Use | Reserved |
++-----------------------------------+---------------------------------------------+--------+----------+
+...
+| gigabytes                         |                                        1000 |    340 |        0 |
+...
+| gigabytes_OS or Database          |                                         100 |     20 |        0 |
+...
++-----------------------------------+---------------------------------------------+--------+----------+
+~~~
+{: .output}
+Here you can see that the total volume storage limit is 1000 GB and 340 GB of that is used, while the limit for 'OS or Database' volumes is 100 GB and 20 GB are used. A similar situation exists on Beluga cloud between "EC" volumes ([erasure encoded](https://en.wikipedia.org/wiki/Erasure_code) and backed by HDD) versus, "SSD" backed by solid state drives. Some other tasks that require use of the OpenStack CLI are: cloning a volume, and downloading an image, and creating object store credentials. In addition you can perform the same tasks you perform in the web dashboard using the CLI. For example creating new virtual machines, volumes, images, security groups, and security group rules.
+
+In addition to the OpenStack CLI providing additional functionality and information beyond that provided by the OpenStack web dashboard, it also makes it easier to automate common tasks by placing commands into shell scripts if desired. There are also other ways to automate common OpenStack tasks such as using the [OpenStack Python SDK](https://docs.openstack.org/mitaka/user-guide/sdk.html) to write Python scripts, [OpenStack Orchestration](https://docs.openstack.org/heat/2023.1/index.html) using [template files](https://docs.openstack.org/heat/2023.1/template_guide/index.html), or [Terraform](https://www.terraform.io/). However, these methods of automation are beyond the scope of this workshop, instead we focus just on the OpenStack CLI.
 
 
-
-## Use cases
-Cloud computing offers a wide range of usage possibilities. From running basic HTML sites for publishing works, to collaborative wikis, to running persistent twitter/web scrapers automating data collection and processing, to providing platforms to help support whole research communities. Possible use cases are varied and wide ranging. One particular example using the Compute Canada cloud is [Voyant Tools](https://voyant-tools.org/), a web-based text reading and analysis environment. It is a scholarly project that is designed to facilitate reading and interpretive practises for digital humanities students and scholars as well as for the general public.
-
-## Motivation
-Humanities and social sciences often make use of computers in varied and diverse ways typically not needed by the more traditional high performance computing tasks. Cloud computing provides the required flexibility for these varied and diverse usage cases. However, this flexibility comes at a cost. To facilitate a wide array possible use cases, much of the configuration and setup must be undertaken by individual researchers and not by the central bodies which manage the cloud infrastructure. With each cloud setup being customized and unique it becomes difficult to manage centrally in a consistent manner and much of the management and customization is left to the end cloud user.
-
-## Overview
-
-This course is composed of three main parts.
-
-**Part I** will introduce the basics of working with static website generators in particular will show how to use the Jekyll static website generator with a theme selected from one of the many Jekyll theme repositories. We will walk through the steps to configure your website and how to explore our downloaded theme in order to learn how to use it. We will use Markdown to format text and include links and images in our pages. We will even use a little HTML in our markdown to embed a youtube video in one of the pages of our site.
-
-**Part II** will introduce basic concepts of cloud computing and get our hands dirty creating a virtual machine to host the Jekyll site created in Part I. We will apply software and security updates on our virtual machine and install a webserver to publish our Jekyll site to the world. There will also be a quick demonstration of an alternate hosting method involving [github](https://github.com/).
-
-**Part III** will show how to setup a graphical user interface (e.g. GUI or desktop) and connect to a remote GUI desktop on our virtual machines and use it with GUI applications.
-
-Before we begin make sure you have completed the steps in the [setup](../setup) page. If you have had difficulty with any part of them, now is the time to let us know and we will help you solve them.
