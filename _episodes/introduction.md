@@ -18,6 +18,7 @@ start: true
 start_time: 780
 ---
 
+<!--
 > ## Office hours
 > 
 > | Day of the week | Date | Time (ADT) |
@@ -25,8 +26,14 @@ start_time: 780
 > | Friday    | TBD | 1:00 - 3:00pm |
 > | Friday    | TBD | 1:00 - 3:00pm |
 {: .callout}
+-->
 
 Cloud computing offers a wide range of usage possibilities. From running basic HTML sites for publishing works, to collaborative wikis, to running persistent web scrapers, automating data collection and processing, to providing platforms to help support whole research communities. Possible use cases are varied and wide ranging. One particular example using the Alliance cloud is [Voyant Tools](https://voyant-tools.org/), a web-based text reading and analysis environment. It is a scholarly project that is designed to facilitate reading and interpretive practises for digital humanities students and scholars as well as for the general public. In order to make good use of the cloud you need to know how to interact with it to do the things you need to do. In this workshop we are going to introduce a new way of interacting with OpenStack clouds, the OpenStack Command Line Interface (CLI).
+
+## Overview
+
+In this workshop we will ... ***TODO***
+
 
 ## What is the OpenStack CLI?
 
@@ -48,19 +55,19 @@ $ openstack quota show --usage
 ~~~
 {: .bash}
 ~~~
-+-----------------------------------+---------------------------------------------+--------+----------+
-| Resource                          |                                       Limit | In Use | Reserved |
-+-----------------------------------+---------------------------------------------+--------+----------+
++---------------------------+---------+--------+----------+
+| Resource                  |   Limit | In Use | Reserved |
++---------------------------+---------+--------+----------+
 ...
-| gigabytes                         |                                        1000 |    340 |        0 |
+| gigabytes                 |    1000 |    340 |        0 |
 ...
-| gigabytes_OS or Database          |                                         100 |     20 |        0 |
+| gigabytes_OS or Database  |     100 |     20 |        0 |
 ...
-+-----------------------------------+---------------------------------------------+--------+----------+
++---------------------------+---------+--------+----------+
 ~~~
 {: .output}
-Here you can see that the total volume storage limit is 1000 GB and 340 GB of that is used, while the limit for 'OS or Database' volumes is 100 GB and 20 GB are used. A similar situation exists on Beluga cloud between "EC" volumes ([erasure encoded](https://en.wikipedia.org/wiki/Erasure_code) and backed by HDD) versus, "SSD" backed by solid state drives. Some other tasks that require use of the OpenStack CLI are: cloning a volume, and downloading an image, and creating object store credentials. In addition you can perform the same tasks you perform in the web dashboard using the CLI. For example creating new virtual machines, volumes, images, security groups, and security group rules.
+Here you can see that the total volume storage limit is 1000 GB and 340 GB of that is used, while the limit for 'OS or Database' volumes is 100 GB and 20 GB are used. A similar situation exists on Beluga cloud between "EC" volumes ([erasure encoded](https://en.wikipedia.org/wiki/Erasure_code) and backed by HDD) versus, "SSD" backed by solid state drives. Some other tasks that require use of the OpenStack CLI are: cloning a volume, downloading an image, and creating object store credentials. In addition you can perform the same tasks you perform in the web dashboard using the CLI. For example creating new virtual machines, volumes, images, security groups, and security group rules.
 
-In addition to the OpenStack CLI providing additional functionality and information beyond that provided by the OpenStack web dashboard, it also makes it easier to automate common tasks by placing commands into shell scripts if desired. There are also other ways to automate common OpenStack tasks such as using the [OpenStack Python SDK](https://docs.openstack.org/mitaka/user-guide/sdk.html) to write Python scripts, [OpenStack Orchestration](https://docs.openstack.org/heat/2023.1/index.html) using [template files](https://docs.openstack.org/heat/2023.1/template_guide/index.html), or [Terraform](https://www.terraform.io/). However, these methods of automation are beyond the scope of this workshop, instead we focus just on the OpenStack CLI.
+The OpenStack CLI also makes it easier to automate common tasks by placing commands into shell scripts. There are other ways to automate common OpenStack tasks such as using the [OpenStack Python SDK](https://docs.openstack.org/mitaka/user-guide/sdk.html) to write Python scripts, [OpenStack Orchestration](https://docs.openstack.org/heat/2023.1/index.html) using [template files](https://docs.openstack.org/heat/2023.1/template_guide/index.html), or [Terraform](https://www.terraform.io/). While these other methods of automation provide many different benefits over using OpenStack CLI commands in a shell script they do have significantly larger learning curves. These methods of automation are beyond the scope of this workshop.
 
 

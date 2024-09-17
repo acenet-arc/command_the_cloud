@@ -47,7 +47,7 @@ Generally password authentication is a bad idea unless you take special precauti
 
 # Installing OpenStack CLI
 
-We will install the OpenStack CLI into a Python virtual environment. Virtual environments allow you to isolate multiple python environments from each other to avoid different versions of the same packages clashing with each other. It also makes it easy to remove no longer needed python modules and applications by just removing the virtual environment folder they were installed into. Lets create a new virtual environment into which we will install the OpenStack CLI. 
+We will install the OpenStack CLI into a Python virtual environment. Virtual environments allow you to isolate multiple python environments from each other to avoid different versions of the same packages clashing with each other. It also makes it easy to remove no longer needed python modules and applications by just removing the virtual environment folder. Lets create a new virtual environment into which we will install the OpenStack CLI. 
 
 ~~~
 $ virtualenv pyenvopst
@@ -66,9 +66,9 @@ $ ls
 pyenvopst
 ~~~
 {: .output}
-You can see that this created a new folder called `pyenvopst` where the virtual environment is stored.
+This created a new folder called `pyenvopst` where the virtual environment is stored.
 
-Now lets activate the environment so that we will now be using that new Python environment.
+Lets activate the environment.
 
 ~~~
 $ source ./pyenvopst/bin/activate

@@ -68,6 +68,8 @@ exclude:
 episode_order: 
   - introduction
   - installing-cli
+  - creating-a-keypair
+  - creating-a-vm
   
 # Turn off built-in syntax highlighting.
 highlighter: false
