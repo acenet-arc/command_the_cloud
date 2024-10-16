@@ -5,10 +5,14 @@ teaching: 20
 exercises: 0
 questions:
 - "How do you create a virtual machine using the OpenStack CLI?"
+- "How do you find out which flavors, images, and networks are available?"
+- "How do you check on the status of a virtual machine?"
 objectives:
 - "Create a virtual machine using the OpenStack CLI"
 keypoints:
-- ""
+- "OpenStack CLI have commands to list flavors, images, and networks available to a project."
+- "The `openstack server create` command can be used to create a virtual machine."
+- "The `openstack server list` shows a list of virtual machines and various properties including their statuses."
 
 start: false
 ---
@@ -31,10 +35,34 @@ To use this command we need to following information:
 To figure out what these values should be, we can use some OpenStack CLI commands.
 
 Since we are going to be running a series of OpenStack commands to get the above information, to save a little typing, lets start by entering into the OpenStack command prompt.
+
+You can use the `openstack` command in one of two ways. First you can use it to run a single command once, like we have already done with `openstack image list` when we were checking to make sure our authentication worked, or you can run only the `openstack` command by its self and enter multiple OpenStack commands one after the other without having to first type `openstack` which can be useful if you know you want to run a number of different OpenStack commands at once. Lets quickly try it.
+
 ~~~
 $ openstack
 ~~~
 {: .bash}
+~~~
+(openstack)
+~~~
+{: .output}
+We now have a new prompt `(openstack)` and we can type OpenStack commands at that prompt without having to type `openstack` first as we did previously.
+~~~
+(openstack) image list
+~~~
+{: .bash}
+~~~
++--------------------------------------+-----------------------------------+--------+
+| ID                                   | Name                              | Status |
++--------------------------------------+-----------------------------------+--------+
+| 8fb60bbf-1b73-4339-8bab-7692fccee2cb | AlmaLinux-8.10-x64-2024-05        | active |
+...
+| cc683663-c2b6-4626-ae6a-f6129cf2f316 | Ubuntu-22.04.4-Jammy-x64-2024-06  | active |
+| 241de10b-becc-4d4d-a622-61695e5cb94f | Ubuntu-24.04-Noble-x64-2024-06    | active |
++--------------------------------------+-----------------------------------+--------+
+~~~
+{: .output}
+
 Now lets see the list of flavors we can pick from.
 ~~~
 (openstack) flavor list
@@ -133,7 +161,7 @@ To see a list of virtual machines in the cloud project use the `server list` com
 +-----------+-----------+--------+-----------+-----------+-------------+
 | ID        | Name      | Status | Networks  | Image     | Flavor      |
 +-----------+-----------+--------+-----------+-----------+-------------+
-| 54eed12e- | user03    | ACTIVE | cgeroux-p | N/A       | p1-1.5gb    |
+| 54eed12e- | user03    | ACTIVE | XXXXXXX-p | N/A       | p1-1.5gb    |
 | fa7b-     |           |        | rivate=19 | (booted   |             |
 | 4a6c-     |           |        | 2.168.0.1 | from      |             |
 | 9b59-     |           |        | 22        | volume)   |             |
@@ -208,7 +236,7 @@ Now we are all set to connect to our newly created VM. But first lets exit the O
 (openstack) exit
 ~~~
 {: .bash}
-Now conect to our new virtual machine.
+Now connect to our new virtual machine.
 ~~~
 $ ssh ubuntu@###.###.###.###
 ~~~
@@ -227,3 +255,10 @@ Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-35-generic x86_64)
 ubuntu@<your-user-name>:~$
 ~~~
 {: .output}
+
+Now lets exit our newly created VM and return to the VM where running our OpenStack CLI commands.
+~~~
+$ exit
+~~~
+{: .bash}
+

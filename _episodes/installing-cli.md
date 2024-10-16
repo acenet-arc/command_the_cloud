@@ -95,7 +95,9 @@ Finally lets use the Python package installer [pip](https://pypi.org/project/pip
 
 In order to authenticate a number of environment variables need to be set in your shell which the OpenStack CLI will reference to authenticate you with your OpenStack project. These are things like the project ID, the URL to the cloud's authentication service, project name and so on. To avoid needing to know all the settings for a particular cloud and project you can download a file called an "OpenStack RC" file which contains most of the settings needed to authenticate, with the exception of your password. Then when you source this file, as we did when activating our python virtual environment above, it will ask you for your OpenStack cloud password which you can type in. This password gets saved in an environment variable that is stored for the lifetime of your shell. If your shell is on a compromised machine, it maybe possible for someone to gain access to your shell environment variables and thus your password. There for it is recommended to use the command line clients on a well secured non-publicly shared machine.
 
-To find this "OpenStack RC" file log into the OpenStack dashboard, navigate to the particular project you want to use the OpenStack CLI with (drop down in top left), and go to "Project" -> "API Access" and click "Download OpenStack RC File". This will save the file on your local machine where other items you would normaly download from the Internet go, for example a "Downloads" folder, or perhaps your "Desktop" depending on where you configured your web browser to save files. Open this file in a plain text editor such as notepad on Windows or TextEdit on Mac select all and copy the contents of this file. Then back on our VM create a new file using the nano text editor and paste in the contents of the downloaded file.
+To find this "OpenStack RC" file **log into the OpenStack dashboard**. Use the username and password provided on the spreadsheet.
+
+Once logged into the OpenStack dashboard, navigate to the particular project you want to use the OpenStack CLI with (drop down in top left), and go to "Project" -> "API Access" and click "Download OpenStack RC File". This will save the file on your local machine where other items you would normally download from the Internet go, for example a "Downloads" folder, or perhaps your "Desktop" depending on where you configured your web browser to save files. Open this file in a plain text editor such as notepad on Windows or TextEdit on Mac select all and copy the contents of this file. Then back on our VM create a new file using the nano text editor and paste in the contents of the downloaded file (shift+insert key on MobaXterm).
 
 ~~~
 $ nano openstack-rc.sh
@@ -144,14 +146,17 @@ export OS_IDENTITY_API_VERSION=3
 {: .output}
 Then save and exit nano by pressing `ctrl`+`x`, answering `Y` when asked if you want to 'Save modified buffer?', and pressing your return key to accept the file name.
 
-Note that I have replaced some strings with 'X' and other descriptive strings, rather than leave the actual contents of those strings for security reasons.
+Note that I have replaced some strings with 'X' and other descriptive strings, rather than leave the actual contents of those strings for security reasons. What you see will be slightly different because of this.
 
 Then to set those environment variables source the OpenStack RC file.
 ~~~
 $ source ./openstack-rc.sh
-Please enter your OpenStack Password for project project-name as user your-user-name:
 ~~~
 {: .bash}
+~~~
+Please enter your OpenStack Password for project project-name as user your-user-name:
+~~~
+{: .output}
 And enter the password you use to log into the OpenStack dashboard which matches the username specified in your rc file. Once this is complete issue the following command to verify you can indeed authenticate with the project.
 ~~~
 $ openstack image list

@@ -20,6 +20,52 @@ keypoints:
 start: false
 ---
 
+As a first task for using our newly setup OpenStack CLI, lets create a new virtual machine. However, in order to access it we will first need to have a keypair created and the public key setup with our OpenStack account so that it can be injected into newly created virtual machines.
+
+We can generate a new key pair to use when we create new virtual machines using `ssh-keygen` command.
+
+~~~
+$ ssh-keygen -t ed25519
+~~~
+{: .bash}
+~~~
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/user03/.ssh/id_ed25519):
+~~~
+{: .output}
+Press enter to accept that filename.
+~~~
+Created directory '/home/user03/.ssh'.
+Enter passphrase (empty for no passphrase): 
+~~~
+{: .output}
+It is a good idea to enter a passphrase to protect your private keys. You will not see the characters you type for your passphrase. **Make sure it is something you can easily remember**, we will need to use it later.
+~~~
+Enter same passphrase again:
+~~~
+{: .output}
+Enter your passphrase again go confirm.
+~~~
+Your public key has been saved in /home/user03/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:WVLtnV1/8/dp77wexgzexwwlkg6G0LIFLInDx5NbI9M user03@ctc
+The key's randomart image is:
++--[ED25519 256]--+
+| . o =oo  ..     |
+|  + X E.oo  ..  .|
+|   o B =o +.o..o+|
+|    . .  = o..o++|
+|        S   ... +|
+|            . =+o|
+|             . *B|
+|              .++|
+|              o+*|
++----[SHA256]-----+
+~~~
+{: .output}
+
+Now that we have created a public/private keypair, we need to send the public key to OpenStack. Lets see if we can find an OpenStack CLI command to do that.
+
 To find more information about the `openstack` command you can type `openstack help` which produces a huge amount of text describing how the command can be used, all of the available options, and a list of sub commands.
 ~~~
 $ openstack help
@@ -79,44 +125,6 @@ positional arguments:
 ~~~
 {: .output}
 
-
-You can use the `openstack` command in one of two ways. First you can use it to run a single command once, like we have already done with `openstack image list` when we were checking to make sure our authentication worked, or you can run only the `openstack` command by its self and enter multiple OpenStack commands one after the other without having to first type `openstack` which can be useful if you know you want to run a number of different OpenStack commands at once. Lets quickly try it.
-
-~~~
-$ openstack
-~~~
-{: .bash}
-~~~
-(openstack)
-~~~
-{: .output}
-We now have a new prompt `(openstack)` and we can type OpenStack commands at that prompt without having to type `openstack` first as we did previously.
-~~~
-(openstack) image list
-~~~
-{: .bash}
-~~~
-+--------------------------------------+-----------------------------------+--------+
-| ID                                   | Name                              | Status |
-+--------------------------------------+-----------------------------------+--------+
-| 8fb60bbf-1b73-4339-8bab-7692fccee2cb | AlmaLinux-8.10-x64-2024-05        | active |
-...
-| cc683663-c2b6-4626-ae6a-f6129cf2f316 | Ubuntu-22.04.4-Jammy-x64-2024-06  | active |
-| 241de10b-becc-4d4d-a622-61695e5cb94f | Ubuntu-24.04-Noble-x64-2024-06    | active |
-+--------------------------------------+-----------------------------------+--------+
-~~~
-{: .output}
-
-To return to the normal command prompt type `exit`.
-~~~
-(openstack) exit
-~~~
-{: .bash}
-~~~
-$
-~~~
-{: .output}
-
 > ## OpenStack Command Permissions
 > There are many commands listed with `openstack help` some of which, as a regular user of the cloud, you have permission to use and others require administrative permissions to use. If you attempt to use a command requiring administration permissions you might see error messages such as these below.
 > 
@@ -133,48 +141,6 @@ $
 > ~~~
 > {: .output}
 {: .callout}
-
-Virtual machine authentication usually requires a private/public keypair. We can generate a new key pair to use when we create new virtual machines using `ssh-keygen` command.
-
-~~~
-$ ssh-keygen -t ed25519
-~~~
-{: .bash}
-~~~
-Generating public/private ed25519 key pair.
-Enter file in which to save the key (/home/user03/.ssh/id_ed25519):
-~~~
-{: .output}
-Press enter to accept that filename.
-~~~
-Created directory '/home/user03/.ssh'.
-Enter passphrase (empty for no passphrase): 
-~~~
-{: .output}
-It is a good idea to enter a passphrase to protect your private keys. You will not see the characters you type for your passphrase. **Make sure it is something you can easily remember**, we will need to use it later.
-~~~
-Enter same passphrase again:
-~~~
-{: .output}
-Enter your passphrase again go confirm.
-~~~
-Your public key has been saved in /home/user03/.ssh/id_ed25519.pub
-The key fingerprint is:
-SHA256:WVLtnV1/8/dp77wexgzexwwlkg6G0LIFLInDx5NbI9M user03@ctc
-The key's randomart image is:
-+--[ED25519 256]--+
-| . o =oo  ..     |
-|  + X E.oo  ..  .|
-|   o B =o +.o..o+|
-|    . .  = o..o++|
-|        S   ... +|
-|            . =+o|
-|             . *B|
-|              .++|
-|              o+*|
-+----[SHA256]-----+
-~~~
-{: .output}
 
 We can then upload our newly created public key to our OpenStack cloud using the `keypair create` command.
 ~~~
