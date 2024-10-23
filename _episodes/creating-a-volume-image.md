@@ -205,4 +205,4 @@ To upload an image file you would use the `image create` command with the `--fil
 openstack image create --file ./user03-image.qcow2 --disk-foramt qcow2 new-user03-image
 ~~~
 {: .bash}
-Note that the `--disk-format` provided must match the actual format of the image file you upload, if not your image will not work correctly. This the main reason I specify the `.qcow2` extension on my image file so that I can remember what format the image file is.
+Note that the `--disk-format` provided must match the actual format of the image file you upload, if not your image will not work correctly. This is the main reason I specify the `.qcow2` extension on my image file so that I can remember what format the image file is.

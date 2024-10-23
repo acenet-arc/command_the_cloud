@@ -9,6 +9,8 @@ packages:
   - fail2ban
   - python3-pip
   - python3-virtualenv
+  - restic
+  - s3cmd
 users:
   - name: <admin-user>
     shell: /bin/bash

@@ -60,3 +60,163 @@ Duplicity is a command line tool that works great, but it can be a bit cumbersom
 
 Both Duplicity and Restic support the S3 protocol used with many different object store providers including the Alliance OpenStack clouds. Object store can be a convenient place to store backups.
 
+<!-- You don't need to create a container, restic will do that for you
+Create a container
+~~~
+(openstack) container create cgeroux-workshop-container
+~~~
+{: .bash}
+~~~
++-------------------+-------------------+---------------------+
+| account           | container         | x-trans-id          |
++-------------------+-------------------+---------------------+
+| AUTH_############ | cgeroux-workshop- | tx################# |
+| ################# | contianer         | ####-##########-    |
+| ###               |                   | ######-default      |
++-------------------+-------------------+---------------------+
+~~~
+{: .output}
+-->
+
+Create credentials to access project's object store with tools other than the OpenStack CLI.
+~~~
+(openstack) ec2 credentials create
+~~~
+{: .bash}
+
+~~~
++------------+------------------------------------------------+
+| Field      | Value                                          |
++------------+------------------------------------------------+
+| access     | ################################               |
+| links      | {'self': 'https://arbutus.cloud.computecanada. |
+|            | ca:5000/v3/users/############################# |
+|            | ca:5000/v3/users/############################# |
+|            | ###################################/credential |
+|            | s/OS-EC2/################################'}    |
+| project_id | ################################               |
+| secret     | ################################               |
+| trust_id   | None                                           |
+| user_id    | ############################################## |
+|            | ##################                             |
++------------+------------------------------------------------+
+~~~
+{: .output}
+
+Leave the OpenStack prompt.
+~~~
+(openstack) exit
+~~~
+{: .bash}
+
+Set environment variables to allow tools like s3cmd and restic to operate on containers.
+~~~
+$ export RESTIC_BACKUP_URL="s3:https://object-arbutus.cloud.computecanada.ca:443/<container-name>"
+$ export AWS_ACCESS_KEY_ID="################################"
+$ export AWS_SECRET_ACCESS_KEY="################################"
+~~~
+{: .bash}
+
+~~~
+$ restic -r $RESTIC_BACKUP_URL init
+~~~
+{: .bash}
+~~~
+enter password for new repository:
+enter password again:
+created restic repository 103f316734 at s3:https://object-arbutus.cloud.computecanada.ca:443/cgeroux-workshop-container
+
+Please note that knowledge of your password is required to access
+the repository. Losing your password means that your data is
+irrecoverably lost.
+~~~
+{: .output}
+
+**Characters you enter as password are not shown.**
+
+Create some things to backup.
+~~~
+$ mkdir work
+$ echo "stuff to save">work/important_file.txt
+$ cat work/important_file.txt
+~~~
+{: .bash}
+~~~
+stuff to save
+~~~
+{: .output}
+
+Now create a backup of the `work` folder.
+~~~
+$ restic backup -r $RESTIC_BACKUP_URL ./work/
+~~~
+{: .bash}
+~~~
+enter password for repository:
+repository 103f3167 opened (version 2, compression level auto)
+created new cache in /home/user03/.cache/restic
+no parent snapshot found, will read all files
+
+
+Files:           1 new,     0 changed,     0 unmodified
+Dirs:            1 new,     0 changed,     0 unmodified
+Added to the repository: 755 B (697 B stored)
+
+processed 1 files, 14 B in 0:00
+snapshot b765d737 saved
+~~~
+{: .output}
+
+List snapshots in backup
+~~~
+$ restic snapshots -r $RESTIC_BACKUP_URL
+~~~
+{: .bash}
+~~~
+enter password for repository: 
+repository 103f3167 opened (version 2, compression level auto)
+ID        Time                 Host        Tags        Paths
+------------------------------------------------------------------------
+b765d737  2024-10-18 17:57:37  ctc                     /home/user03/work
+------------------------------------------------------------------------
+1 snapshots
+~~~
+{: .output}
+~~~
+$ rm -rf ./work/
+$ ls 
+~~~
+{: .bash}
+~~~
+-rw-rw-r-- 1 user03 user03       1959 Sep 13 13:28  openstack-rc.sh
+drwxrwxr-x 4 user03 user03       4096 Sep  5 18:20  pyenvopst
+~~~
+{: .output}
+
+Then restore it from backup.
+~~~
+$ restic restore -r $RESTIC_BACKUP_URL --target=./ b765d737
+~~~
+{: .bash}
+~~~
+enter password for repository: 
+repository 103f3167 opened (version 2, compression level auto)
+
+restoring <Snapshot b765d737 of [/home/user03/work] at 2024-10-18 17:57:37.919267415 +0000 UTC by user03@ctc> to ./
+Summary: Restored 2 files/dirs (14 B) in 0:00
+~~~
+{: .output}
+~~~
+$ ls
+~~~
+{: .bash}
+~~~
+-rw-rw-r-- 1 user03 user03       1959 Sep 13 13:28  openstack-rc.sh
+drwxrwxr-x 4 user03 user03       4096 Sep  5 18:20  pyenvopst
+drwxrwxr-x 2 user03 user03       4096 Oct 18 17:56  work
+~~~
+{: .output}
+
+Lots more to learn about using restic, see [restic documentation](https://restic.readthedocs.io/en/stable/index.html).
+
+

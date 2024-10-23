@@ -40,7 +40,7 @@ Generally password authentication is a bad idea unless you take special precauti
 > The below packages have already been installed on the course VMs for us. However, if you are using a VM you setup yourself, you will need to install the below packages to gain access to both `pip3` and `virtualenv`. At least this is the case in the most recent Ubuntu 24.04 version of the operating system.
 > 
 > ~~~
-> sudo apt install python3-pip python3-virtualenv
+> sudo apt install python3-pip python3-virtualenv restic s3cmd
 > ~~~
 > {: .bash}
 {: .callout}
