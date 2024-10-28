@@ -4,7 +4,10 @@ title: "Backups"
 teaching: 20
 exercises: 0
 questions:
-- ""
+- "Should software and data be treated similarly with backups?"
+- "Can software \"backups\" be more future proof?"
+- "What are some good tools for backing up data?"
+- "Is there a convenient place to store backups?"
 objectives:
 - ""
 keypoints:
@@ -51,7 +54,7 @@ Another option, which can be used either separate from or in conjunction with pr
 As with the provisioning tools there are repositories of different containers providing different software configurations. In the case of docker there is [docker hub](https://hub.docker.com/). As an example here is the [mysql](https://hub.docker.com/_/mysql) database container on docker hub. When updates are made new containers can be pulled down and services can be restarted to run with these new updated containers.
 
 ## Data Backup
-In contrast backing up data can be much more straight forward, just copy the bits and bytes to some where safe. It can be that simple using something like [sftp](https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol) or slightly more sophisticated with [rsync](https://en.wikipedia.org/wiki/Rsync) which will only transfer updated files. However there are even more feature rich backup tools that allow you to keep multiple snapshots of your data, remove older versions when storage gets tight, and optionally compression and encryption data. A couple I have used are:
+In contrast backing up data can be much more straight forward, just copy the bits and bytes to some where safe. It can be that simple using something like [sftp](https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol) or slightly more sophisticated with [rsync](https://en.wikipedia.org/wiki/Rsync) which will only transfer updated files. However there are even more feature rich backup tools that allow you to keep multiple snapshots of your data, remove older versions when storage gets tight, and optionally compression and encryption of data. A couple I have used are:
 
 * [Duplicity](https://duplicity.gitlab.io/)
 * [Restic](https://restic.net/)
