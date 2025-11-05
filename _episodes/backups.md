@@ -1,7 +1,7 @@
 ---
 layout: episode
 title: "Backups"
-teaching: 20
+teaching: 40
 exercises: 0
 questions:
 - "Should software and data be treated similarly with backups?"

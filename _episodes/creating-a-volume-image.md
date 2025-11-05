@@ -1,7 +1,7 @@
 ---
 layout: episode
 title: "Creating a volume image"
-teaching: 20
+teaching: 30
 exercises: 0
 questions:
 - "What is a volume snapshot?"
@@ -42,7 +42,7 @@ Whenever creating a snapshot of a virtual machine or a snapshot or image of a vo
 > ## Create an image from the Dashboard
 > Go to "Project" -> "Volumes" -> "Volumes". Then in the "Attached To" column find the name of your virtual machine. Then in the far right column "Actions" for the row for that volume select "Upload to Image". Try with or without "Force" checked. What happens?
 > > ## Solution
-> > `Error: Unable to upload volume to image`. This error message occurs regardless of weather "Force" is checked or not.
+> > `Error: Unable to upload volume to image`. This error message occurs regardless of whether "Force" is checked or not.
 > {: .solution}
 {: .challenge}
 
@@ -202,7 +202,7 @@ The `.qcow2` extension on the file name isn't reqiured but is a nice way to remi
 
 To upload an image file you would use the `image create` command with the `--file` option.
 ~~~
-openstack image create --file ./user03-image.qcow2 --disk-foramt qcow2 new-user03-image
+openstack image create --file ./user03-image.qcow2 --disk-format qcow2 new-user03-image
 ~~~
 {: .bash}
 Note that the `--disk-format` provided must match the actual format of the image file you upload, if not your image will not work correctly. This is the main reason I specify the `.qcow2` extension on my image file so that I can remember what format the image file is.

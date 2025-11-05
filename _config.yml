@@ -70,6 +70,7 @@ episode_order:
   - installing-cli
   - creating-a-keypair
   - creating-a-vm
+  - break-I
   - creating-a-volume-image
   - backups
   

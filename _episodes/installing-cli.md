@@ -1,7 +1,7 @@
 ---
 layout: episode
 title: "Installing CLI"
-teaching: 20
+teaching: 35
 exercises: 0
 questions:
 - "How do you install the OpenStack CLI?"

@@ -1,7 +1,7 @@
 ---
 layout: episode
 title: "Creating a virtual machine"
-teaching: 20
+teaching: 30
 exercises: 0
 questions:
 - "How do you create a virtual machine using the OpenStack CLI?"

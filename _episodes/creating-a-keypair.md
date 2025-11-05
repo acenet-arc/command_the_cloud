@@ -1,7 +1,7 @@
 ---
 layout: episode
 title: "Creating a Keypair"
-teaching: 20
+teaching: 10
 exercises: 0
 questions:
 - "How can I see what OpenStack commands are possible?"
