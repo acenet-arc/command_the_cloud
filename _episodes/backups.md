@@ -180,7 +180,7 @@ enter password for repository:
 repository 103f3167 opened (version 2, compression level auto)
 ID        Time                 Host        Tags        Paths
 ------------------------------------------------------------------------
-b765d737  2024-10-18 17:57:37  ctc                     /home/user03/work
+b765d737  2024-10-18 17:57:37  cli                     /home/<your-username>/work
 ------------------------------------------------------------------------
 1 snapshots
 ~~~
