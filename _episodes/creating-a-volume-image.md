@@ -37,21 +37,30 @@ In the case of a compute virtual machine, there is no volume to create a snapsho
 {: .callout}
 
 ## Shutdown virtual machine
-Whenever creating a snapshot of a virtual machine or a snapshot or image of a volume it is important to shutdown the virtual machine first. If the virtual machine is running while the snapshot or image is created it is possible that it could be writing something to the disk at the time the snapshot or image are created. This can result in a corrupted and unusable image or snapshot. Lets shutdown the virtual machine in the dashboard. Go to "Project" -> "Compute" -> "Instances" then find the row with the virtual machine with the same name as your username. In the far right hand column of this row under the "Actions" column in the drop down menu select "Shut Off Instance".
+Whenever creating a snapshot of a virtual machine or a snapshot or image of a volume it is important to shutdown the virtual machine first. If the virtual machine is running while the snapshot or image is created it is possible that it could be writing something to the disk at the time the snapshot or image are created. This can result in a corrupted and unusable image or snapshot. Lets shutdown the virtual machine.
 
-> ## Create an image from the Dashboard
-> Go to "Project" -> "Volumes" -> "Volumes". Then in the "Attached To" column find the name of your virtual machine. Then in the far right column "Actions" for the row for that volume select "Upload to Image". Try with or without "Force" checked. What happens?
+~~~
+$ openstack
+(openstack) server stop <your-username>
+~~~
+{: .bash}
+
+> ## Create an image 
+> ~~~
+> (openstack) image create --volume <your-username>
+> ~~~
+> {: .bash}
 > > ## Solution
-> > `Error: Unable to upload volume to image`. This error message occurs regardless of whether "Force" is checked or not.
+> > `BadRequestException: 400: Client Error for url: https://arbutus.cloud.computecanada.ca:8776/v3/738989d1d3764816bcca6742d7f09440/volumes/9c11fa07-1aa5-4907-b8cb-16a933a62eeb/action, Invalid volume: Volume 9c11fa07-1aa5-4907-b8cb-16a933a62eeb status must be available`
 > {: .solution}
 {: .challenge}
 
-The reason this is happening is because it is the volume that the virtual machine boots from, though it doesn't tell you this in the error message unfortunately. The volume must be detached form the virtual machine before you can create an image of the volume. However, you can not just detach a boot volume form a virtual machine, instead you would need to delete the virtual machine. Unless otherwise specified, volumes will persist beyond a particular virtual machine and can be used to create a new virtual machine booting form the same volume retaining the data on the volume.
+The volume must be detached form the virtual machine before you can create an image of the volume. However, you can not just detach a boot volume form a virtual machine, instead you would need to delete the virtual machine. Unless otherwise specified, volumes will persist beyond a particular virtual machine and can be used to create a new virtual machine booting form the same volume retaining the data on the volume.
 
 > ## Delete on terminate
 > When creating a virtual machine it is possible to specify that the volume should be deleted when the virtual machine is also deleted. It is possible to check if this is the case for a particular virtual machine using the OpenStack CLI.
 > ~~~
-> $ openstack server show <server-name-or-id>
+> $ (openstack) server show <server-name-or-id>
 > ~~~
 > {: .bash}
 > ~~~
@@ -73,41 +82,9 @@ Deleting a virtual machine to create an image of the volume isn't the most desir
 
 To create a clone of a volume we need to know the volume's ID and its size so that the newly created volume is the same size as the original. Lets re-enter the OpenStack shell.
 
+We can create the clone of the volume using the `volume create` command.
 ~~~
-$ openstack
-~~~
-{: .bash}
-~~~
-(openstack) 
-~~~
-{: .output}
-Now lets list the volumes in our project
-~~~
-(openstack) volume list
-~~~
-{: .bash}
-~~~
-+--------------+--------------+------------+------+----------------+
-| ID           | Name         | Status     | Size | Attached to    |
-+--------------+--------------+------------+------+----------------+
-...
-| 0e493f24-    |              | in-use     |   20 | Attached to    |
-| 3b0b-4c76-   |              |            |      | user03 on      |
-| 94c3-        |              |            |      | /dev/vda       |
-| a7e6211628bc |              |            |      |                |
-...
-+--------------+--------------+------------+------+----------------+
-~~~
-{: .output}
-Look through the list of volume untel you find the one that says `Attached to <your-vm-name> on /dev/vda'. This provides the volume ID in the "ID" column that we need to know as well as the size of the volume in the "Size" column.
-
-> ## Copying the volume ID
-> It can be tricky to copy the volume ID when it is split over multiple lines. If possible make your terminal wider so you can get the ID all on one line to make copying it easier. Then re-run your `volume list` command and it will make use of the extra width.
-{: .callout}
-
-Now we can create the clone of the volume.
-~~~
-(openstack) volume create --source 0e493f24-3b0b-4c76-94c3-a7e6211628bc --size 20 user03-volume-clone
+(openstack) volume create --source <your-username> --size 20 <your-username>-volume-clone
 ~~~
 {: .bash}
 ~~~
@@ -123,7 +100,7 @@ Now we can create the clone of the volume.
 | encrypted           | False                                  |
 | id                  | e5accde4-0ecc-4eba-b2cd-b15ba66b0bd3   |
 | multiattach         | False                                  |
-| name                | user03-volume-clone                    |
+| name                | <your-username>-volume-clone           |
 | properties          |                                        |
 | replication_status  | None                                   |
 | size                | 20                                     |
@@ -146,22 +123,22 @@ Lets check for our newly created volume.
 +----------+----------+----------+------+-------------+
 | ID       | Name     | Status   | Size | Attached to |
 +----------+----------+----------+------+-------------+
-| e5accde4 | user03-  | availabl |   20 |             |
-| -0ecc-   | volume-  | e        |      |             |
-| 4eba-    | clone    |          |      |             |
-| b2cd-    |          |          |      |             |
+| e5accde4 | <your-   | availabl |   20 |             |
+| -0ecc-   | username>| e        |      |             |
+| 4eba-    | -volume- |          |      |             |
+| b2cd-    | clone    |          |      |             |
 | b15ba66b |          |          |      |             |
 | 0bd3     |          |          |      |             |
 ...
 +----------+----------+----------+------+-------------+
 ~~~
 {: .output}
-Notice how it isn't attached to any VMs, this means it isn't a boot volume for any VMs and we can create an image of it and it contains all the data that the original volume we cloned it from does.
+Notice how it isn't attached to any VMs, this means we can create an image of it and it contains all the data that the original volume we cloned it from does.
 
 ## Creating an image of a volume
 
 ~~~
-(openstack) image create --disk-format qcow2 --volume user03-volume-clone user03-image
+(openstack) image create --disk-format qcow2 --volume <your-username>-volume-clone <your-username>-image
 ~~~
 {: .bash}
 ~~~
