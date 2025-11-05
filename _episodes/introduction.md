@@ -32,8 +32,12 @@ Cloud computing offers a wide range of usage possibilities. From running basic H
 
 ## Overview
 
-In this workshop we will ... ***TODO***
-
+* What is the OpenStack CLI and why use it?
+* How to install it.
+* How to get help.
+* Create a VM using the CLI.
+* Create an image of a Volume.
+* Talk about backups and backup to object store.
 
 ## What is the OpenStack CLI?
 
