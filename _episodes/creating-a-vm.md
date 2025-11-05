@@ -17,24 +17,22 @@ keypoints:
 start: false
 ---
 
-We will use the `openstack server create` command to create our virtual machine. We will create a virtual machine booting from a volume as we did in the [Introduction to Cloud](https://acenet-arc.github.io/introduction_to_cloud/) workshop except this time using the OpenStack CLI instead of the OpenStack web dashboard.
+We will create a virtual machine booting from a volume as we did in the [Introduction to Cloud](https://acenet-arc.github.io/introduction_to_cloud/) workshop except this time using the OpenStack CLI instead of the OpenStack web dashboard.
+
+We will create our VM in a two step process. Step 1. create a bootable volume with the image we want to use, and step 2. create the VM. We will use the `openstack volume create` command to create our volume and the `openstack server create` command to create our virtual machine. It isn't required to do this in a two step process, but sometimes volume creation can be a little slow and the VM creation will time out waiting for the volume to be created, which is why we are doing it in two steps.
 
 ~~~
-openstack server create --flavor <flavor> --image <image> --boot-from-volume <volume-size> --network <network> --key-name <key-name> <vm-name>
+openstack volume create --size <size> --image <image> <name>
 ~~~
 {: .bash}
 
 To use this command we need to following information:
-* `<flavor>`: the flavor of the VM we want to create
-* `<image>`: the operating system image to copy onto the newly created VMs boot drive
-* `<volume-size>`: the size of the boot volume
-* `<network>`: which network we want to connect the virtual machine to
-* `<key-name>`: the name of the public key to inject into the VM
-* `<vm-name>`: the name of the newly created VM. Use your username.
+* `<size>`: the size of the volume in GB, 20GB is usually sufficient.
+* `<image>`: the operating system image to copy onto the newly created volume
 
-To figure out what these values should be, we can use some OpenStack CLI commands.
+To figure out the name of the image to use, we can use an OpenStack CLI command.
 
-Since we are going to be running a series of OpenStack commands to get the above information, to save a little typing, lets start by entering into the OpenStack command prompt.
+Since we are going to be running a series of OpenStack commands to create our volume and virtual machine, to save a little typing, lets start by entering into the OpenStack command prompt.
 
 You can use the `openstack` command in one of two ways. First you can use it to run a single command once, like we have already done with `openstack image list` when we were checking to make sure our authentication worked, or you can run only the `openstack` command by its self and enter multiple OpenStack commands one after the other without having to first type `openstack` which can be useful if you know you want to run a number of different OpenStack commands at once. Lets quickly try it.
 
@@ -59,9 +57,42 @@ We now have a new prompt `(openstack)` and we can type OpenStack commands at tha
 ...
 | cc683663-c2b6-4626-ae6a-f6129cf2f316 | Ubuntu-22.04.4-Jammy-x64-2024-06  | active |
 | 241de10b-becc-4d4d-a622-61695e5cb94f | Ubuntu-24.04-Noble-x64-2024-06    | active |
+...
 +--------------------------------------+-----------------------------------+--------+
 ~~~
 {: .output}
+
+Lets use the `Ubuntu-24.04-Noble-x64-2024-06` image.
+
+We can now create our volume.
+~~~
+(openstack) volume create --size 20 --image Ubuntu-24.04-Noble-x64-2024-06 <your-username>
+~~~
+{: .bash}
+~~~
++--------------------------------+-----------------------------------+
+| Field                          | Value                             |
++--------------------------------+-----------------------------------+
+| attachments                    | []                                |
+| availability_zone              | nova                              |
+...
+| volume_type_id                 | None                              |
++--------------------------------+-----------------------------------+
+~~~
+{: .output}
+
+Now that we have a volume with our Operating system image copied onto it, we can create our virtual machine with the following command.
+~~~
+openstack server create --flavor <flavor> --volume <volume> --network <network> --key-name <key-name> <vm-name>
+~~~
+{: .bash}
+
+To use this command we need to following information:
+* `<flavor>`: the flavor of the VM we want to create
+* `<volume>`: name of the volume we just created
+* `<network>`: which network we want to connect the virtual machine to
+* `<key-name>`: the name of the public key to inject into the VM
+* `<vm-name>`: the name of the newly created VM. Use your username.
 
 Now lets see the list of flavors we can pick from.
 ~~~
@@ -87,23 +118,6 @@ Everything in OpenStack has a unique `ID`. This ID can be used to reference the 
 
 For our flavor lets use the small `p1-1.5gb` flavor.
 
-Now lets see what images we have available.
-~~~
-(openstack) image list
-~~~
-{: .bash}
-~~~
-+--------------------------------------+-----------------------------------+--------+
-| ID                                   | Name                              | Status |
-+--------------------------------------+-----------------------------------+--------+
-...
-| 241de10b-becc-4d4d-a622-61695e5cb94f | Ubuntu-24.04-Noble-x64-2024-06    | active |
-...
-+--------------------------------------+-----------------------------------+--------+
-~~~
-{: .output}
-Lets use the `Ubuntu-24.04-Noble-x64-2024-06` image.
-
 Now lets see what networks we have available.
 
 ~~~
@@ -114,8 +128,8 @@ Now lets see what networks we have available.
 +-------------------------+-----------------+--------------------------+
 | ID                      | Name            | Subnets                  |
 +-------------------------+-----------------+--------------------------+
-| XXXXXXXX-XXXX-XXXX-     | XXXXXXX-private | XXXXXXXX-XXXX-XXXX-XXXX- |
-| XXXX-XXXXXXXXXXXX       |                 | XXXXXXXXXXXX             |
+| XXXXXXXX-XXXX-XXXX-     | <project-name>  | XXXXXXXX-XXXX-XXXX-XXXX- |
+| XXXX-XXXXXXXXXXXX       | -network        | XXXXXXXXXXXX             |
 ...
 | 6621bf61-6094-4b24-     | Public-Network  | 1f6a472c-c1bf-42a4-9473- |
 | a9a0-f5794c3a881e       |                 | 7ec1a543f0a8, 420e1bf0-  |
@@ -125,7 +139,7 @@ Now lets see what networks we have available.
 +-------------------------+-----------------+--------------------------+
 ~~~
 {: .output}
-We want to connect the VM to our local private network, so pick the network with the suffix `-private`. However, in order to access our VM from outside the private network we will need to create and allocated a floating IP form the `Public-Network`, so keep that network in mind too.
+We want to connect the VM to our local private network, so pick the network named after the project we are currently in. However, in order to access our VM from outside the private network we will need to create and allocated a floating IP form the `Public-Network`, so keep that network in mind too.
 
 Finally lets double check our public key name.
 ~~~
@@ -144,13 +158,13 @@ Finally lets double check our public key name.
 {: .output}
 Lets use the public key we just created in the previous episode, `ctc-workshop`.
 
-For our VM name we will use our username to uniquely identify our virtual machine form those created by other students and we will give it a 20 GB volume to boot from. Putting all this information together we end up with the following command.
+For our VM name we will use our username to uniquely identify our virtual machine form those created by other students. Putting all this information together we end up with the following command.
 
 ~~~
-(openstack) server create --flavor 'p1-1.5gb' --image 'Ubuntu-24.04-Noble-x64-2024-06' --boot-from-volume 20 --network 'XXXXXXX-private' --key-name 'ctc-workshop' <your-user-name>
+(openstack) server create --flavor 'p1-1.5gb' --volume <your-user-name>  --network '<project-name>-network' --key-name 'ctc-workshop' <your-user-name>
 ~~~
 {: .bash}
-Remember to replace `<your-user-name>` and `XXXXXXX-private`.
+Remember to replace `<your-user-name>` and `<project-name>-network`.
 
 To see a list of virtual machines in the cloud project use the `server list` command.
 ~~~
