@@ -112,7 +112,8 @@ Leave the OpenStack prompt.
 ~~~
 {: .bash}
 
-Set environment variables to allow tools like s3cmd and restic to operate on containers.
+Set environment variables to allow tools like s3cmd and restic to operate on containers (Note: these are not the containers mentioned above e.g. docker containers but a component of object store to hold files).
+
 ~~~
 $ export RESTIC_BACKUP_URL="s3:https://object-arbutus.cloud.computecanada.ca:443/<container-name>"
 $ export AWS_ACCESS_KEY_ID="################################"
