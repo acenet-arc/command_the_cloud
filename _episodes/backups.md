@@ -32,7 +32,7 @@ Backing up software should not be treated in the usually sense of saving the spe
 
 As a first step towards a better solution when you create your VM initially, keep good notes about the software you install and configure to allow you to more easily install and configure software on a new VM. I usually keep specific commands I run and notes explaining what the commands do and what the options I am using are.
 
-Taking notes is certainly a good place to start however there are other options which can allow you to benefit from the work of others and allow automation. The details of these options is beyond the scope of this workshop but I wanted to mention two main options with just enough of a description to let you know why you might want to use them and some of the benefits they bring.
+Taking notes is certainly a good place to start, however there are other options which can allow you to benefit from the work of others and allow automation. The details of these options is beyond the scope of this workshop but I wanted to mention two main options with just enough of a description to let you know why you might want to use them and some of the benefits they bring.
 
 ### Provisioning tools
 Taking this approach further, a provisioning tool can be used. A provisioning tool is software that allows you to save configurations and automate the installation and configuration of software. Some commonly used provisioning tools are:
@@ -41,12 +41,12 @@ Taking this approach further, a provisioning tool can be used. A provisioning to
 * [salt](https://docs.saltproject.io/en/latest/topics/index.html)
 * [chef](https://www.chef.io/)
 
-These tools do have a bit of a learning curve however do have significant benefits especially if you are managing more than a couple virtual machines. I have a tried out the top three tools listed, and have most experience with ansible. In my experience ansible is the simplest and easiest to use.
+These tools do have a bit of a learning curve but also have significant benefits especially if you are managing more than a couple virtual machines. I have a tried out the top three tools listed, and have most experience with ansible. In my experience ansible is the simplest and easiest to use.
 
 Many of these tools have configurations for common software that are maintained by others which can help ease the burden of developing and maintaining these installation processes. For example the ansible provisioning tool has the [Ansible Galaxy](https://galaxy.ansible.com/ui/) and as an example of a common configuration here is an [apache](https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/apache/documentation/) web server role. There are usually various configuration and variable options allowing you to customize configurations while still benefitting from best practices when using configurations from reputable and experienced developers.
 
 ### Containers
-Another option, which can be used either separate from or in conjunction with provisioning tools, are containers. Containers can be though of like very light weight virtual machines. They share some parts of the underlying operating system hosting the containers yet are also isolated from the underlying operating system to some degree. This isolation can have security benefits. Containers usually contain some software and optionally data. Containers being light weight allows one to pull down new containers and run them in place of older outdated containers. This provides a way to easily update software and configurations. Some popular containerization tools are:
+Another option, which can be used either separate from or in conjunction with provisioning tools, are containers. Containers can be thought of like very light weight virtual machines. They share some parts of the underlying operating system hosting the containers yet are also isolated from the underlying operating system to some degree. This isolation can have security benefits. Containers usually contain some software and optionally data. Containers being light weight allows one to pull down new containers and run them in place of older outdated containers. This provides a way to easily update software and configurations. Some popular containerization tools are:
 * [Docker](https://docs.docker.com/get-started/docker-overview/)
 * [Apptainer](https://apptainer.org/)
 * [Podman](https://podman.io/)
