@@ -30,7 +30,7 @@ There is a better approach. Backups of VMs can be considered in two main compone
 ## Software Backup
 Backing up software should not be treated in the usually sense of saving the specific bits and bytes of the software. Instead save the process of installing and configuring the software. This allows you to re-create your VM with up-to-date versions of the software later.
 
-As a first step towards a better solution when you create your VM initially, keep good notes about the software you install and configure to allow you to more easily install and configure software on a new VM. I usually keep specific commands I run and notes explaining what the commands do and what the I am using options are.
+As a first step towards a better solution when you create your VM initially, keep good notes about the software you install and configure to allow you to more easily install and configure software on a new VM. I usually keep specific commands I run and notes explaining what the commands do and what the options I am using are.
 
 Taking notes is certainly a good place to start however there are other options which can allow you to benefit from the work of others and allow automation. The details of these options is beyond the scope of this workshop but I wanted to mention two main options with just enough of a description to let you know why you might want to use them and some of the benefits they bring.
 
